@@ -35,8 +35,8 @@ def decipher(raw_message,private_key,data):
     for block in raw_message:
         data.append(pow(block,private_key[0] ,private_key[1]))
 #message
-mess = "Viktoria"
-
+mess = "Your message goes here...j"
+print("Open message:\n",mess)
 #empty keys
 public_key = []
 private_key = []
@@ -46,14 +46,19 @@ raw_message = []
 #deciphered data
 message = []
 
-print("Message:")
+print("Open message (numbers):")
 for i in range(len(mess)):
-    print(mess[i] + ' ' + str(ord(mess[i])))
+    print(str(ord(mess[i])),end="-")
 
 keys(public_key,private_key,10,100)
 cipher(mess,public_key,raw_message)
-decipher(raw_message,private_key,message)
 
-print("Deciphered:")
+print("\nCiphered message: ")
+for i in raw_message:
+    print(str(i),end="-")
+
+decipher(raw_message,private_key,message)
+print("\nDeciphered message:")
 for i in message:
-    print(str(chr(i)))
+    print(str(chr(i)),end="")
+print()
