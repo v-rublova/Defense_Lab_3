@@ -14,6 +14,7 @@ def keys(pub,priv,floor,ceil):
 
     q = randprime(floor,ceil)
     p = randprime(floor,ceil)
+    print("\np=",str(p),"q=",str(q))
     n = p * q
     phi = (p - 1) * (q - 1)
     e = prevprime(phi)
@@ -26,6 +27,7 @@ def keys(pub,priv,floor,ceil):
 
     priv.append(d)
     priv.append(n)
+    
 
 def cipher(data,public_key,raw_message):
     for i in range(len(mess)):
