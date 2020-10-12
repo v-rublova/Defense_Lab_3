@@ -35,7 +35,7 @@ def decipher(raw_message,private_key,data):
     for block in raw_message:
         data.append(pow(block,private_key[0] ,private_key[1]))
 #message
-mess = "Your message goes here...j"
+mess = input("Your message:")
 print("Open message:\n",mess)
 #empty keys
 public_key = []
