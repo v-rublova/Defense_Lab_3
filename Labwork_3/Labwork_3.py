@@ -57,10 +57,10 @@ def cipher(data,public_key,raw_message):
 def decipher(raw_message,private_key,info):
     data = []
     for block in raw_message:
-        data.append(pow(block,private_key[0] ,private_key[1]))
+        data.append(str.zfill(str(pow(block,private_key[0] ,private_key[1])),9))
     if (len(data) > 1):
         for i in range(len(data)-1,0,-1):
-            data[i]=(data[i]-data[i-1])%private_key[1];
+            data[i]=str.zfill(str((int(data[i])-int(data[i-1]))%private_key[1]),9)
     for i in data:
         info.extend([str(i)[:3],str(i)[3:6],str(i)[6:]])
 
