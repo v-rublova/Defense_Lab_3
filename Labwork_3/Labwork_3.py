@@ -1,6 +1,9 @@
 from sympy import *
 import libnum
 import random
+
+block_data_size = 4
+
 def keys(pub,priv,floor,ceil):
     """
        pub - list for public key;
@@ -36,7 +39,7 @@ def block_it_up(mess,public_key,numeric_mess):
     for i in range(0,len(mess_copy)):
         c+=1
         if (c <= 2):
-            str_buf+=str.zfill(str(ord(mess_copy[i])),3)
+            str_buf+=str.zfill(str(ord(mess_copy[i])),block_data_size)
         if (c == 2 or (not ev and i == len(mess_copy) - 1)):
             if not numeric_mess:#if list is empty
                 numeric_mess.append(str_buf) 
@@ -51,12 +54,12 @@ def cipher(data,public_key,raw_message):
 def decipher(raw_message,private_key,info):
     data = []
     for block in raw_message:
-        data.append(str.zfill(str(pow(block,private_key[0] ,private_key[1])),6))
+        data.append(str.zfill(str(pow(block,private_key[0] ,private_key[1])),block_data_size*2))
     if (len(data) > 1):
         for i in range(len(data) - 1,0,-1):
-            data[i] = str.zfill(str((int(data[i]) - int(data[i - 1])) % private_key[1]),6)
+            data[i] = str.zfill(str((int(data[i]) - int(data[i - 1])) % private_key[1]),block_data_size*2)
     for i in data:
-        info.extend([str(i)[:3],str(i)[3:]])
+        info.extend([str(i)[:block_data_size],str(i)[block_data_size:]])
 
 #if message is not null
 t = true
