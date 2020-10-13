@@ -13,7 +13,7 @@ def keys(pub,priv,floor,ceil):
 
     q = randprime(floor,ceil)
     p = randprime(floor,ceil)
-    print("\np=",str(p),"q=",str(q))
+    print("*"*10,"p="+str(p),"q="+str(q),"*"*10,sep="\n")
     n = p * q
     phi = (p - 1) * (q - 1)
     e = prevprime(phi)
@@ -29,27 +29,21 @@ def keys(pub,priv,floor,ceil):
 
 def block_it_up(mess,public_key,numeric_mess):
     mess_copy = mess
-    t = true
+    ev = true
     c = 0 #counter for blocks
     str_buf = ""
-    while (t):
-        if (len(mess_copy) % 3 != 0):
-            mess_copy += str(chr(168)).strip()
-        else:
-            t = false
+    if (len(mess_copy) % 2 != 0): ev = false
     for i in range(0,len(mess_copy)):
         c+=1
-        if (c <= 3):
+        if (c <= 2):
             str_buf+=str.zfill(str(ord(mess_copy[i])),3)
-        if (c == 3):
+        if (c == 2 or (not ev and i == len(mess_copy) - 1)):
             if not numeric_mess:#if list is empty
-                numeric_mess.append(str_buf)
-                str_buf=""
-                c = 0
+                numeric_mess.append(str_buf) 
             else:
-                numeric_mess.append((int(str_buf) + int(numeric_mess[len(numeric_mess)-1]))%public_key[1])
-
-
+                numeric_mess.append((int(str_buf) + int(numeric_mess[len(numeric_mess) - 1])) % public_key[1])
+            str_buf = ""
+            c = 0
 def cipher(data,public_key,raw_message):
     for i in data:
         raw_message.append(pow(int(i),public_key[0],public_key[1]))
@@ -57,17 +51,20 @@ def cipher(data,public_key,raw_message):
 def decipher(raw_message,private_key,info):
     data = []
     for block in raw_message:
-        data.append(str.zfill(str(pow(block,private_key[0] ,private_key[1])),9))
+        data.append(str.zfill(str(pow(block,private_key[0] ,private_key[1])),6))
     if (len(data) > 1):
-        for i in range(len(data)-1,0,-1):
-            data[i]=str.zfill(str((int(data[i])-int(data[i-1]))%private_key[1]),9)
+        for i in range(len(data) - 1,0,-1):
+            data[i] = str.zfill(str((int(data[i]) - int(data[i - 1])) % private_key[1]),6)
     for i in data:
-        info.extend([str(i)[:3],str(i)[3:6],str(i)[6:]])
+        info.extend([str(i)[:3],str(i)[3:]])
 
-
+#if message is not null
+t = true
 #message
-mess = input("Your message:")
-print("Open message:\n",mess)
+while t:
+    mess = input("Your message:")
+    if mess: t = false
+print("Open message:",mess,sep="\n")
 #empty keys
 public_key = []
 private_key = []
@@ -95,5 +92,6 @@ for i in raw_message:
 decipher(raw_message,private_key,message)
 print("\nDeciphered message:")
 for i in message:
-    print(str(chr(int(i))),end="")
+    if int(i): 
+        print(str(chr(int(i))),end="")
 print()
