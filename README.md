@@ -13,3 +13,6 @@ Libs instalation:
 2. Execute next lines:
   * pip install libnum
   * pip install sympy
+
+Execution example:
+![Image of console](Labwork_3/exe_example.png)
